@@ -3,7 +3,7 @@ import {useNavigate} from "react-router-dom";
 import {EmployersList} from "features/employers-list";
 import styles from './Employers.module.sass'
 
-const Employers = () => {
+const EmployersPage = () => {
     const navigate = useNavigate();
 
     const handleRowClick = (id: number) => {
@@ -15,4 +15,4 @@ const Employers = () => {
     </div>
 };
 
-export default Employers;
+export default EmployersPage;

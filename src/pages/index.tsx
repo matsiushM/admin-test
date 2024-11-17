@@ -1,7 +1,7 @@
 import {createBrowserRouter} from "react-router-dom";
 
-import Employers from "./employers";
-import EmployersEditor from "./emplyers-editor";
+import Employers from "./employers-page";
+import EmployersEditor from "./emplyers-editor-page";
 
 export const router = createBrowserRouter([
     {
