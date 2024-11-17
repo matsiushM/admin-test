@@ -1,0 +1,32 @@
+$table-border-color: #ccc
+$table-header-bg: #4caf50
+$table-header-color: #fff
+$table-row-hover-bg: #f1f1f1
+
+.styled-table
+  width: 100%
+  border-collapse: collapse
+  text-align: left
+
+  thead
+    background: $table-header-bg
+    color: $table-header-color
+
+    th
+      padding: 12px 15px
+      font-size: 16px
+      text-transform: uppercase
+
+  tbody
+    tr
+      border-bottom: 1px solid $table-border-color
+
+      &:hover
+        background: $table-row-hover-bg
+
+      td
+        padding: 10px 15px
+        font-size: 14px
+
+    tr:last-child
+      border-bottom: none

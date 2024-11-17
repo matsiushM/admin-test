@@ -3,6 +3,8 @@ import {
 } from "react-router-dom";
 import {Provider as ReduxProvider} from 'react-redux'
 
+import './style.sass'
+
 import {router} from "pages";
 import {store} from "./store";
 

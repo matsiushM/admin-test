@@ -1,11 +1,7 @@
 import {createSlice} from '@reduxjs/toolkit'
 
-import {Employee} from "./types";
+import {EmployersState} from "./types";
 import {EMPLOYERS_MOCKED} from "./employersMocked";
-
-export interface EmployersState {
-    list: Employee[]
-}
 
 const initialState: EmployersState = {
     list: EMPLOYERS_MOCKED
