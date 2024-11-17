@@ -1,10 +1,12 @@
 import {Reducer} from "@reduxjs/toolkit";
 
+import {ROLES} from "../constants.ts";
+
 export interface Employee {
     id: number;
     name: string
     isArchive: boolean;
-    role: 'driver' | 'waiter' | 'cook';
+    role: typeof ROLES[keyof typeof ROLES];
     phone: string;
     birthday: string
 }
