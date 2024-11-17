@@ -1,13 +1,5 @@
 import {Reducer} from "@reduxjs/toolkit";
 
-export interface EmployersState {
-    list: Employee[]
-}
-
-export type EmployersSliceStore = ReturnType<Reducer<{
-    employers: EmployersState
-}>>
-
 export interface Employee {
     id: number;
     name: string
@@ -17,3 +9,15 @@ export interface Employee {
     birthday: string
 }
 
+export interface EmployersState {
+    list: Employee[]
+    sortedList: Employee[]
+    sort: {
+        field: keyof Employee;
+        direction: 'asc' | 'desc'
+    }
+}
+
+export type EmployersSliceStore = ReturnType<Reducer<{
+    employers: EmployersState
+}>>

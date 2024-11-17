@@ -1,0 +1,28 @@
+.sortable-th
+  position: relative
+  text-align: left
+  user-select: none
+
+  &_sort_enabled
+    cursor: pointer
+
+  &__content
+    display: flex
+    align-items: center
+    gap: 0.5rem
+
+  &__label
+    font-weight: bold
+
+  &__icon
+    width: 0
+    height: 0
+    border-style: solid
+
+    &.asc
+      border-width: 0 4px 6px 4px
+      border-color: transparent transparent #fff transparent
+
+    &.desc
+      border-width: 6px 4px 0 4px
+      border-color: #fff transparent transparent transparent

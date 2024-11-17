@@ -1,11 +1,32 @@
 import {TableVirtuoso} from "react-virtuoso";
 
-import {employersHooks} from "entities/employers"
+import {employersHooks, EmployersState, Employee} from "entities/employers"
 import {ROLES} from "shared/locales";
+import {TableHead} from "shared/ui/TableHead";
 import './style.sass'
 
+const columns: {
+    accessor: EmployersState['sort']['field'],
+    name: string,
+    enableSorting?: boolean
+}[] = [
+    {accessor: 'name', name: 'Имя'},
+    {accessor: 'role', name: 'Должность', enableSorting: true},
+    {accessor: 'phone', name: 'Телефон', enableSorting: true},
+]
+
 export const EmployersList = () => {
-    const employers = employersHooks.useEmployersList()
+    const {sortBy} = employersHooks.useEmployersActions()
+    const employers = employersHooks.useEmployersSortedList()
+    const sortInfo = employersHooks.useSortInfo()
+
+    const handleSort = (field: EmployersState['sort']['field']) => {
+        if (sortInfo.field === field) {
+            sortBy({field, direction: sortInfo.direction === 'asc' ? 'desc' : 'asc'})
+        } else {
+            sortBy({field, direction: "asc"})
+        }
+    }
 
     return <TableVirtuoso
         style={{height: '100%'}}
@@ -22,17 +43,32 @@ export const EmployersList = () => {
         totalCount={employers.length}
         fixedHeaderContent={() => (
             <tr>
-                <th>Имя</th>
-                <th>Должность</th>
-                <th>Телефон</th>
+                {
+                    columns.map(column => (
+                        <TableHead
+                            key={column.accessor}
+                            label={column.name}
+                            enableSorting={column.enableSorting}
+                            sortedBy={sortInfo.field === column.accessor ? sortInfo.direction : 'asc'}
+                            onSort={column.enableSorting ? () => handleSort(column.accessor) : () => {
+                            }}
+                        />
+                    ))
+                }
             </tr>
         )}
         itemContent={(_, employer) => (
-            <>
-                <td>{employer.name}</td>
-                <td>{ROLES[employer.role] ?? employer.role}</td>
-                <td>{employer.phone}</td>
-            </>
+            columns.map((column) => {
+                const value = employer[column.accessor]
+
+                if (column.accessor === 'role') {
+                    return <td key={`${column.accessor}_${value}`}>{ROLES[value as Employee['role']] ?? value}</td>
+                }
+
+                return (
+                    <td key={`${column.accessor}_${value}`}>{value}</td>
+                )
+            })
         )}
     />
 }
