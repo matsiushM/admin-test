@@ -1,6 +1,6 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit'
 
-import {EmployersState} from "./types";
+import {Employee, EmployersState} from "./types";
 import {EMPLOYERS_MOCKED} from "./employersMocked";
 
 const initialState: EmployersState = {
@@ -15,6 +15,15 @@ export const employersSlice = createSlice({
     reducers: {
         sortBy: (state, {payload}: PayloadAction<EmployersState['sort']>) => {
             state.sort = payload
+        },
+        editEmployee: (state, {payload}: PayloadAction<Employee>) => {
+            state.list = state.list.map((e) => {
+                if(payload.id === e.id) {
+                    return payload
+                }
+
+                return e
+            })
         }
     },
 })

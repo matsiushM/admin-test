@@ -1,4 +1,4 @@
-import './th.sass'
+import styles from './TableHead.module.sass'
 
 interface Props {
     label: string;
@@ -15,11 +15,11 @@ export const TableHead = (
         onSort,
     }: Props
 ) => {
-    return <th className={`sortable-th ${enableSorting ? 'sortable-th_sort_enabled' : ''}`} onClick={onSort}>
-        <div className="sortable-th__content">
-            <span className="sortable-th__label">{label}</span>
+    return <th className={`${styles.sortableTh} ${enableSorting ? styles.sortableTh_sort_enabled : ''}`} onClick={onSort}>
+        <div className={styles.sortableTh__content}>
+            <span className={styles.sortableTh__label}>{label}</span>
             {enableSorting && (
-                <span className={`sortable-th__icon ${sortedBy}`}/>
+                <span className={`${styles.sortableTh__icon} ${styles[sortedBy]}`}/>
             )}
         </div>
     </th>

@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
+
 import styles from './Select.module.sass';
 
 interface Option {
@@ -14,7 +15,7 @@ interface SelectProps {
 }
 
 export const Select = ({ label, options, value = '', onChange }: SelectProps) => {
-    const [selectedValue, setSelectedValue] = useState(value);
+    const [selectedValue, setSelectedValue] = React.useState(value);
 
     const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const newValue = e.target.value;

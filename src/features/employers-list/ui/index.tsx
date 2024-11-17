@@ -1,9 +1,12 @@
 import {TableVirtuoso} from "react-virtuoso";
 
-import {employersHooks, EmployersState, Employee} from "entities/employers"
-import {ROLES} from "shared/locales";
+import {employersHooks, EmployersState, Employee, ROLES_NAMES} from "entities/employers"
 import {TableHead} from "shared/ui/TableHead";
-import './style.sass'
+import styles from './EmployersList.module.sass'
+
+interface Props {
+    onClick?: (id: number) => void
+}
 
 const columns: {
     accessor: EmployersState['sort']['field'],
@@ -15,7 +18,7 @@ const columns: {
     {accessor: 'phone', name: 'Телефон', enableSorting: true},
 ]
 
-export const EmployersList = () => {
+export const EmployersList = ({onClick}: Props) => {
     const {sortBy} = employersHooks.useEmployersActions()
     const employers = employersHooks.useEmployersSortedList()
     const sortInfo = employersHooks.useSortInfo()
@@ -35,9 +38,22 @@ export const EmployersList = () => {
                 <table
                     {...props}
                     style={style}
-                    className="styled-table"
+                    className={styles.styledTable}
                 />
             ),
+            TableRow: ({children, ...props}) => {
+                const rowIndex = props['data-index'];
+                const row = employers[rowIndex];
+
+                return (
+                    <tr
+                        {...props}
+                        onClick={() => onClick?.(row.id)}
+                    >
+                        {children}
+                    </tr>
+                )
+            }
         }}
         data={employers}
         totalCount={employers.length}
@@ -62,7 +78,7 @@ export const EmployersList = () => {
                 const value = employer[column.accessor]
 
                 if (column.accessor === 'role') {
-                    return <td key={`${column.accessor}_${value}`}>{ROLES[value as Employee['role']] ?? value}</td>
+                    return <td key={`${column.accessor}_${value}`}>{ROLES_NAMES[value as Employee['role']] ?? value}</td>
                 }
 
                 return (
