@@ -2,6 +2,7 @@ import {TextField} from "shared/ui/TextField";
 import {Select} from "shared/ui/Select";
 import {PhoneInput} from "shared/ui/PhoneInput";
 import {Checkbox} from "shared/ui/Checkbox";
+import {DateInput} from "shared/ui/DateInput";
 import {Employee} from "../model/types.ts";
 import {ROLES, ROLES_NAMES} from "../constants.ts";
 
@@ -31,6 +32,11 @@ export const Fields = ({employee, onChange}: FieldsProps) => {
             label="Номер телефона"
             value={employee.phone}
             onChange={(value) => onChange({option: 'phone', value})}
+        />
+        <DateInput
+            label="Дата рождения"
+            value={employee.birthday}
+            onChange={(value) => onChange({option: 'birthday', value})}
         />
         <Checkbox
             label='В архиве'
