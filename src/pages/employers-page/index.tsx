@@ -1,6 +1,8 @@
 import {useNavigate} from "react-router-dom";
 
 import {EmployersList} from "features/employers-list";
+import {Button} from "shared/ui/Button/Button";
+import AddIcon from "shared/icons/add.svg";
 import styles from './Employers.module.sass'
 
 const EmployersPage = () => {
@@ -10,8 +12,21 @@ const EmployersPage = () => {
         navigate(`/edit/${id}`)
     }
 
-    return <div className={styles.tableContainer}>
-        <EmployersList onClick={handleRowClick}/>
+    const handleAddNew = () => {
+        navigate(`/add`)
+    }
+
+    return <div className={styles.container}>
+        <EmployersList
+            onClick={handleRowClick}
+            toolbarActions={
+                <>
+                    <Button className={styles.tableToolbar__button} onClick={handleAddNew}>
+                        <AddIcon/>
+                    </Button>
+                </>
+            }
+        />
     </div>
 };
 

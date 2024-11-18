@@ -1,3 +1,4 @@
+import React from "react";
 import {TableVirtuoso} from "react-virtuoso";
 
 import {employersHooks, EmployersState, Employee, ROLES_NAMES} from "entities/employers"
@@ -6,6 +7,7 @@ import styles from './EmployersList.module.sass'
 
 interface Props {
     onClick?: (id: number) => void
+    toolbarActions?: React.ReactNode
 }
 
 const columns: {
@@ -18,7 +20,7 @@ const columns: {
     {accessor: 'phone', name: 'Телефон', enableSorting: true},
 ]
 
-export const EmployersList = ({onClick}: Props) => {
+export const EmployersList = ({onClick, toolbarActions}: Props) => {
     const {sortBy} = employersHooks.useEmployersActions()
     const employers = employersHooks.useEmployersSortedList()
     const sortInfo = employersHooks.useSortInfo()
@@ -31,60 +33,66 @@ export const EmployersList = ({onClick}: Props) => {
         }
     }
 
-    return <TableVirtuoso
-        style={{height: '100%'}}
-        components={{
-            Table: ({style, ...props}) => (
-                <table
-                    {...props}
-                    style={style}
-                    className={styles.styledTable}
-                />
-            ),
-            TableRow: ({children, ...props}) => {
-                const rowIndex = props['data-index'];
-                const row = employers[rowIndex];
-
-                return (
-                    <tr
+    return <div style={{width: '100%', height: '100%'}}>
+        <div className={styles.tableToolbar}>
+            {toolbarActions}
+        </div>
+        <TableVirtuoso
+            style={{height: '100%'}}
+            components={{
+                Table: ({style, ...props}) => (
+                    <table
                         {...props}
-                        onClick={() => onClick?.(row.id)}
-                    >
-                        {children}
-                    </tr>
-                )
-            }
-        }}
-        data={employers}
-        totalCount={employers.length}
-        fixedHeaderContent={() => (
-            <tr>
-                {
-                    columns.map(column => (
-                        <TableHead
-                            key={column.accessor}
-                            label={column.name}
-                            enableSorting={column.enableSorting}
-                            sortedBy={sortInfo.field === column.accessor ? sortInfo.direction : 'asc'}
-                            onSort={column.enableSorting ? () => handleSort(column.accessor) : () => {
-                            }}
-                        />
-                    ))
-                }
-            </tr>
-        )}
-        itemContent={(_, employer) => (
-            columns.map((column) => {
-                const value = employer[column.accessor]
+                        style={style}
+                        className={styles.styledTable}
+                    />
+                ),
+                TableRow: ({children, ...props}) => {
+                    const rowIndex = props['data-index'];
+                    const row = employers[rowIndex];
 
-                if (column.accessor === 'role') {
-                    return <td key={`${column.accessor}_${value}`}>{ROLES_NAMES[value as Employee['role']] ?? value}</td>
+                    return (
+                        <tr
+                            {...props}
+                            onClick={() => onClick?.(row.id)}
+                        >
+                            {children}
+                        </tr>
+                    )
                 }
+            }}
+            data={employers}
+            totalCount={employers.length}
+            fixedHeaderContent={() => (
+                <tr>
+                    {
+                        columns.map(column => (
+                            <TableHead
+                                key={column.accessor}
+                                label={column.name}
+                                enableSorting={column.enableSorting}
+                                sortedBy={sortInfo.field === column.accessor ? sortInfo.direction : 'asc'}
+                                onSort={column.enableSorting ? () => handleSort(column.accessor) : () => {
+                                }}
+                            />
+                        ))
+                    }
+                </tr>
+            )}
+            itemContent={(_, employer) => (
+                columns.map((column) => {
+                    const value = employer[column.accessor]
 
-                return (
-                    <td key={`${column.accessor}_${value}`}>{value}</td>
-                )
-            })
-        )}
-    />
+                    if (column.accessor === 'role') {
+                        return <td
+                            key={`${column.accessor}_${value}`}>{ROLES_NAMES[value as Employee['role']] ?? value}</td>
+                    }
+
+                    return (
+                        <td key={`${column.accessor}_${value}`}>{value}</td>
+                    )
+                })
+            )}
+        />
+    </div>
 }
