@@ -6,7 +6,8 @@ import {EMPLOYERS_MOCKED} from "./employersMocked";
 const initialState: EmployersState = {
     list: EMPLOYERS_MOCKED,
     sortedList: EMPLOYERS_MOCKED,
-    sort: {field: 'id', direction: 'asc'}
+    sort: {field: 'id', direction: 'asc'},
+    filters: {},
 }
 
 export const employersSlice = createSlice({
@@ -32,6 +33,12 @@ export const employersSlice = createSlice({
                 ...payload,
                 id: higherEmployeeById.id + 1,
             })
+        },
+        setFilters: (state, {payload}: PayloadAction<Partial<Employee>>) => {
+            state.filters = {
+                ...state.filters,
+                ...payload
+            }
         }
     },
 })

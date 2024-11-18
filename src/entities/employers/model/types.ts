@@ -17,7 +17,8 @@ export interface EmployersState {
     sort: {
         field: keyof Employee;
         direction: 'asc' | 'desc'
-    }
+    },
+    filters: Partial<Employee>
 }
 
 export type EmployersSliceStore = ReturnType<Reducer<{

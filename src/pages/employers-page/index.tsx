@@ -21,7 +21,7 @@ const EmployersPage = () => {
             onClick={handleRowClick}
             toolbarActions={
                 <>
-                    <Button className={styles.tableToolbar__button} onClick={handleAddNew}>
+                    <Button onClick={handleAddNew}>
                         <AddIcon/>
                     </Button>
                 </>

@@ -1,28 +1,28 @@
-import React from 'react';
+import React, {ButtonHTMLAttributes} from 'react';
 
 import styles from './Button.module.sass'
 
-export interface ButtonProps {
-    children: React.ReactNode;
-    onClick?: () => void;
-    type?: 'button' | 'submit' | 'reset';
-    variant?: 'primary' | 'secondary' | 'danger';
-    disabled?: boolean;
-    className?: string
+export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+    children: React.ReactNode,
+    type?: 'button' | 'submit' | 'reset',
+    variant?: 'primary' | 'secondary' | 'danger',
+    disabled?: boolean,
+    className?: string,
+    ref?: React.RefObject<HTMLButtonElement>
 }
 
 export const Button = ({
                            children,
-                           onClick,
                            type = 'button',
                            variant = 'primary',
                            disabled = false,
                            className,
+                           ...props
                        }: ButtonProps) => {
     return (
         <button
             className={`${className} ${styles.button} ${styles[variant]} ${disabled ? styles.disabled : ''}`}
-            onClick={onClick}
+            {...props}
             type={type}
             disabled={disabled}
         >

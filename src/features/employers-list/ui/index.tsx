@@ -1,8 +1,13 @@
 import React from "react";
 import {TableVirtuoso} from "react-virtuoso";
 
+import {Fields, FieldsProps} from "entities/employers/ui/Fields";
+import {initEmployee} from "entities/employers/constants";
 import {employersHooks, EmployersState, Employee, ROLES_NAMES} from "entities/employers"
 import {TableHead} from "shared/ui/TableHead";
+import FilterIcon from 'shared/icons/filter.svg'
+import {Button} from "shared/ui/Button/Button";
+import {Popover} from "shared/ui/Popover";
 import styles from './EmployersList.module.sass'
 
 interface Props {
@@ -21,9 +26,14 @@ const columns: {
 ]
 
 export const EmployersList = ({onClick, toolbarActions}: Props) => {
-    const {sortBy} = employersHooks.useEmployersActions()
-    const employers = employersHooks.useEmployersSortedList()
+    const {sortBy, setFilters} = employersHooks.useEmployersActions()
+    const employers = employersHooks.useEmployersListWithFiltersAndSort()
     const sortInfo = employersHooks.useSortInfo()
+    const [filterAnchor, setFilterAnchor] = React.useState<HTMLElement | null>(null)
+    const [filterEmployee, setFilterEmployee] = React.useState<Partial<Employee>>({
+        role: initEmployee.role,
+        isArchive: initEmployee.isArchive
+    })
 
     const handleSort = (field: EmployersState['sort']['field']) => {
         if (sortInfo.field === field) {
@@ -33,9 +43,34 @@ export const EmployersList = ({onClick, toolbarActions}: Props) => {
         }
     }
 
+    const handleOpenFilters = (e: React.MouseEvent<HTMLElement>) => {
+        setFilterAnchor(e.currentTarget);
+    }
+
+    const handleCloseFilters = () => setFilterAnchor(null)
+
+    const handleFilterChange: FieldsProps['onChange'] = ({option, value}) => {
+        setFilterEmployee({
+            ...filterEmployee,
+            [option]: value
+        })
+    }
+
+    const handleSaveFilters = () => {
+        setFilters(filterEmployee)
+        handleCloseFilters()
+    }
+
     return <div style={{width: '100%', height: '100%'}}>
         <div className={styles.tableToolbar}>
             {toolbarActions}
+            <Button
+                className={styles.tableToolbar__button}
+                onClick={handleOpenFilters}
+                title="Фильтры"
+            >
+                <FilterIcon/>
+            </Button>
         </div>
         <TableVirtuoso
             style={{height: '100%'}}
@@ -94,5 +129,25 @@ export const EmployersList = ({onClick, toolbarActions}: Props) => {
                 })
             )}
         />
+        <Popover
+            anchor={filterAnchor}
+            open={Boolean(filterAnchor)}
+            onClose={handleCloseFilters}
+        >
+            <div className={styles.filters}>
+                <Fields
+                    employee={filterEmployee}
+                    onChange={handleFilterChange}
+                    disabledFields={{
+                        name: true,
+                        phone: true,
+                        birthday: true,
+                    }}
+                />
+            </div>
+            <Button onClick={handleSaveFilters}>
+                Сохранить
+            </Button>
+        </Popover>
     </div>
 }
